@@ -37,30 +37,58 @@ def main():
     _start = datetime.datetime.now()
     logging.info("######## 任务执行时间: %s #######" % _start.strftime("%Y-%m-%d %H:%M:%S.%f"))
     # 第1步创建数据库
+    start_bj = time.time()
     bj.main()
+    logging.info("########第1步，创建数据库，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_bj))
     # 第2.1步创建股票基础数据表
+    start_hdj = time.time()
     hdj.main()
+    logging.info("########第2.1步创建股票基础数据表，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_hdj))
     # 第2.2步创建综合股票数据表
+    start_sddj = time.time()
     sddj.main()
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        # # 第3.1步创建股票其它基础数据表
-        executor.submit(hdtj.main)
-        # # 第3.2步创建股票指标数据表
-        executor.submit(gdj.main)
-        # # # # 第4步创建股票k线形态表
-        executor.submit(kdj.main)
-        # # # # 第5步创建股票策略数据表
-        executor.submit(sdj.main)
+    logging.info("########第2.2步创建综合股票数据表, 使用时间: %s 秒 #######" % (time.time() - start_sddj))
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     # # 第3.1步创建股票其它基础数据表
+    #     executor.submit(hdtj.main)
+    #     # # 第3.2步创建股票指标数据表
+    #     executor.submit(gdj.main)
+    #     # # # # 第4步创建股票k线形态表
+    #     executor.submit(kdj.main)
+    #     # # # # 第5步创建股票策略数据表
+    #     executor.submit(sdj.main)
 
+    # 第3.1步创建股票其它基础数据表
+    start_hdtj = time.time()
+    hdtj.main()
+    logging.info("########第3.1步创建股票其它基础数据表，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_hdtj))
+    # 第3.2步创建股票指标数据表
+    start_gdj = time.time()
+    gdj.main()
+    logging.info("########第3.2步创建股票指标数据表，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_gdj))
+    # 第4步创建股票k线形态表
+    start_kdj = time.time()
+    kdj.main()
+    logging.info("########第4步创建股票k线形态表，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_kdj))
+    # 第5步创建股票策略数据表
+    start_sdj = time.time()
+    sdj.main()
+    logging.info("########第5步创建股票策略数据表，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_sdj))
     # # # # 第6步创建股票回测
+    start_bdj = time.time()
     bdj.main()
-
+    logging.info("########第6步创建股票回测，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_bdj))
     # # # # 第7步创建股票闭盘后才有的数据
+    start_acdj = time.time()
     acdj.main()
+    logging.info("########第7步创建股票闭盘后才有的数据，任务完成, 使用时间: %s 秒 #######" % (time.time() - start_acdj))
 
     logging.info("######## 完成任务, 使用时间: %s 秒 #######" % (time.time() - start))
 
 
 # main函数入口
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as err:
+        logging.error(err)
