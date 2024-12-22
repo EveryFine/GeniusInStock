@@ -1,7 +1,7 @@
 name: Local Image Builder
 on:
-  push:
-    branches: [ "dev" ]
+#  push:
+#    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
@@ -48,7 +48,7 @@ jobs:
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           push: true
-          file: DockerfileLocal
+          file: {context}/DockerfileLocal
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
