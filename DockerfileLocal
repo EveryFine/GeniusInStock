@@ -57,4 +57,4 @@ WORKDIR /data
 COPY . /data/InStock
 
 
-ENTRYPOINT ["supervisord","-n","-c","/data/InStock/supervisor/supervisord.conf"]
+ENTRYPOINT ["supervisord","-n","-c","/data/InStock/supervisor/supervisord_local.conf"]
