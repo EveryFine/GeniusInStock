@@ -70,5 +70,7 @@ COPY cron/cron.monthly /etc/cron.monthly
 #30 19 * * 1-5 /bin/run-parts /etc/cron.workdayly \n\
 #30 22 * * 3,6 /bin/run-parts /etc/cron.monthly \n" > /var/spool/cron/crontabs/root && \
 #    chmod 600 /var/spool/cron/crontabs/root
+# /usr/local/bin/python3 /data/InStock/instock/web/web_service.py
 
-ENTRYPOINT ["supervisord","-n","-c","/data/InStock/supervisor/supervisord_local.conf"]
+#ENTRYPOINT ["supervisord","-n","-c","/data/InStock/supervisor/supervisord_local.conf"]
+ENTRYPOINT ["/usr/local/bin/python3","/data/InStock/instock/web/web_service.py"]
