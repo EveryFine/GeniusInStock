@@ -12,6 +12,7 @@ env:
   TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
   TARGET_SSH_PORT: ${{ secrets.TARGET_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockDbService
+  STOCK_DB_NETWORK: mariadb_instock_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
   TARGET_SERVICE_PORT: 9989
 
@@ -71,6 +72,7 @@ jobs:
             docker container stop geniusstock
             docker container rm geniusstock
             docker container run -d --name geniusstock --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
+                --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
                 -v ~/genius/GeniusStock/log:/data/InStock/instock/log \
                 -e db_host=${{ env.STOCK_DB_CONTAINER_NAME }} \
