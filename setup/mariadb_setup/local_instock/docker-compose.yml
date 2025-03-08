@@ -1,0 +1,20 @@
+version: "3"
+services: 
+  mariadb-slave:
+    image: mariadb:latest
+    container_name: GeniusStockDbSlave
+    restart: always
+    ports:
+      - "33060:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MY_MARIADB_PASSWORD}
+      - MARIADB_DATABASE=instockdb
+    volumes:
+      - /Users/zhengshuang/Documents/ProgramingGuide/Python/量化交易/Database/DbBackup/MariadbXiangCao/LocalDB:/var/lib/mysql:cached
+      - ./slave.cnf:/etc/mysql/my.cnf:cached
+    security_opt:
+      - seccomp:unconfined
+    logging: 
+      driver: "json-file"
+      options: 
+        max-size: "500m"
