@@ -47,7 +47,7 @@ trusted-host = pypi.tuna.tsinghua.edu.cn" > /etc/pip.conf && \
     make && \
     make install && \
     cd .. && \
-    pip install TA-Lib && \
+    pip install TA-Lib==0.5.1 && \
     rm -rf ta-lib* && \
     apt-get --purge remove -y gcc make python3-dev default-libmysqlclient-dev curl && \
     rm -rf /root/.cache/* && rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get autoclean && apt-get autoremove -y
