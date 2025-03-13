@@ -241,3 +241,4 @@ def main():
 # main函数入口
 if __name__ == '__main__':
     main()
+    # save_nph_stock_sector_fund_flow_data('2025-03-12')
