@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-
+import datetime
 import logging
 import os.path
 import sys
@@ -36,7 +36,6 @@ def save_nph_stock_spot_data(date, before=True):
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_SPOT['columns'])
-
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
 
     except Exception as e:
@@ -75,3 +74,4 @@ def main():
 # main函数入口
 if __name__ == '__main__':
     main()
+    # save_nph_etf_spot_data(datetime.date.today(), before=False)
