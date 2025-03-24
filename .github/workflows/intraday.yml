@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/geniusstockintraday
+  IMAGE_NAME: ${{ github.repository }}/instockdayservice
   TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
@@ -62,8 +62,6 @@ jobs:
       packages: write
       attestations: write
     steps:
-      - name: Debug outputs
-        run: echo "Output tags: ${{ needs.build-and-push-image.outputs.output_image_tags }}"
       - name: deploying
         uses: appleboy/ssh-action@v0.1.8
         with:
