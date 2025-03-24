@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/geniusstockintraday
+  IMAGE_NAME: ${{ github.repository }}/instockdayservice
   TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
@@ -70,6 +70,8 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
+            docker container stop geniusstockintraday
+            docker container rm geniusstockintraday
             docker container run -d --name geniusstockintraday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
