@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-
+import datetime
 import logging
 import concurrent.futures
 import os.path
@@ -67,6 +67,8 @@ def save_nph_stock_fund_flow_data(date, before=True):
             return
 
         data.insert(0, 'date', date.strftime("%Y-%m-%d"))
+        # 数据去重
+        data = data.drop_duplicates(subset="code", keep="last")
 
         table_name = tbs.TABLE_CN_STOCK_FUND_FLOW['name']
         # 删除老数据。
@@ -241,4 +243,5 @@ def main():
 # main函数入口
 if __name__ == '__main__':
     main()
-    # save_nph_stock_sector_fund_flow_data('2025-03-12')
+    # save_nph_stock_sector_fund_flow_data('2025-03-25')
+    # save_nph_stock_fund_flow_data(datetime.date.today(),before=False)
