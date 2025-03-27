@@ -73,5 +73,5 @@ def main():
 
 # main函数入口
 if __name__ == '__main__':
-    main()
-    # save_nph_etf_spot_data(datetime.date.today(), before=False)
+    # main()
+    save_nph_etf_spot_data(datetime.date.today(), before=False)
