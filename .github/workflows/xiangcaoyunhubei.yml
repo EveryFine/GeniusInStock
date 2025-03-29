@@ -1,16 +1,16 @@
-name: Tencent Cloud Deploy
+name: XiangCao Cloud Hubei Deploy
 on:
-#  push:
-#    branches: [ "dev" ]
+  push:
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/geniusstockservice
-  TARGET_SSH_HOST: ${{ secrets.TENCENT_SSH_HOST }}
-  TARGET_SSH_USER: ${{ secrets.TENCENT_SSH_USER }}
-  TARGET_SSH_PASSWORD: ${{ secrets.TENCENT_SSH_PASSWORD }}
-  TARGET_SSH_PORT: ${{ secrets.TENCENT_SSH_PORT }}
+  TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.XIANGCAO_HUBEI_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockDbService
   STOCK_DB_NETWORK: mariadb_instock_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
