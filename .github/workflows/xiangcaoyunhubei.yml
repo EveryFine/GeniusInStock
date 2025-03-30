@@ -1,7 +1,7 @@
 name: XiangCao Cloud Hubei Deploy
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 env:
@@ -52,7 +52,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   deploy-to-tencent:
-    name: deploy to tencent server
+    name: deploy to server
     runs-on: ubuntu-latest
     environment: main
     needs: build-and-push-image
