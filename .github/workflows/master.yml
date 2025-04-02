@@ -1,4 +1,4 @@
-name: Genius Stock Service Deploy
+name: XiangCao Cloud Hubei Deploy
 on:
   push:
     branches: [ "master" ]
@@ -7,10 +7,10 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}/geniusstockservice
-  TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
-  TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
-  TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
-  TARGET_SSH_PORT: ${{ secrets.TARGET_SSH_PORT }}
+  TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.XIANGCAO_HUBEI_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockDbService
   STOCK_DB_NETWORK: mariadb_instock_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
@@ -51,8 +51,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  deploy-to-xiangcao:
-    name: deploy to xiangcao server
+  deploy-to-tencent:
+    name: deploy to server
     runs-on: ubuntu-latest
     environment: main
     needs: build-and-push-image
