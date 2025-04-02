@@ -155,7 +155,7 @@ def stock_sector_fund_flow_data(date, index_sector):
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs_table['columns'])
-
+        data = data.drop_duplicates(subset="name", keep="last")
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`name`")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.stock_sector_fund_flow_data处理异常：{e}")
@@ -200,6 +200,7 @@ def save_nph_stock_bonus(date, before=True):
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_BONUS['columns'])
+        data = data.drop_duplicates(subset="code", keep="last")
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.save_nph_stock_bonus处理异常：{e}")
