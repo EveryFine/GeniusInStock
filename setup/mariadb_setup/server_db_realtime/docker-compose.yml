@@ -10,7 +10,7 @@ services:
       - MARIADB_ROOT_PASSWORD=${MY_MARIADB_PASSWORD}
       - TZ=Asia/Shanghai
     volumes:
-      -  ~/genius/GeniusStockIntraday/data:/var/lib/mysql:cached
+      -  ~/genius/GeniusStockRealtime/data:/var/lib/mysql:cached
     security_opt:
       - seccomp:unconfined
     logging: 
