@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/instockintradayservice
+  IMAGE_NAME: ${{ github.repository }}/instockindayservice
   TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
@@ -70,7 +70,7 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
-            docker container run -d --name geniusstockintraday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
+            docker container run -d --name geniusstockinday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
                 -v ~/genius/GeniusStockIntraday/log:/data/InStock/instock/log \
