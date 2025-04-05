@@ -9,6 +9,7 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=${MY_MARIADB_PASSWORD}
       - MARIADB_DATABASE=instockdb
+      - TZ=Asia/Shanghai
     volumes:
       - /Users/zhengshuang/Documents/ProgramingGuide/Python/量化交易/Database/DbBackup/MariadbXiangCao/LocalDB:/var/lib/mysql:cached
       - ./slave.cnf:/etc/mysql/my.cnf:cached

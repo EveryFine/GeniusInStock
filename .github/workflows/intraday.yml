@@ -1,18 +1,18 @@
 name: Intraday  Service Deploy
 on:
-#  push:
-#    branches: [ "master" ]
+  push:
+    branches: [ "master" ]
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/instockdayservice
-  TARGET_SSH_HOST: ${{ secrets.TARGET_SSH_HOST }}
-  TARGET_SSH_USER: ${{ secrets.TARGET_SSH_USER }}
-  TARGET_SSH_PASSWORD: ${{ secrets.TARGET_SSH_PASSWORD }}
-  TARGET_SSH_PORT: ${{ secrets.TARGET_SSH_PORT }}
+  IMAGE_NAME: ${{ github.repository }}/instockintradayservice
+  TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.XIANGCAO_HUBEI_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockIntradayDbService
-  STOCK_DB_NETWORK: server_db_intraday_instock_intraday_network
+  STOCK_DB_NETWORK: intradaydb_instock_intraday_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
   TARGET_SERVICE_PORT: 9979
 
@@ -75,7 +75,7 @@ jobs:
             docker container run -d --name geniusstockintraday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
-                -v ~/diskd/genius/GeniusStockIntraday/log:/data/InStock/instock/log \
+                -v ~/genius/GeniusStockIntraday/log:/data/InStock/instock/log \
                 -e db_host=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 -e db_password=${{ env.STOCK_DB_PASSWORD }} \
                 ${{needs.build-and-push-image.outputs.output_image_tags}}

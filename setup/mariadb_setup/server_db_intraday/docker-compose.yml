@@ -8,9 +8,9 @@ services:
       - "33070:3306"
     environment:
       - MARIADB_ROOT_PASSWORD=${MY_MARIADB_PASSWORD}
+      - TZ=Asia/Shanghai
     volumes:
-      -  ~/diskd/genius/GeniusStockIntraday/data:/var/lib/mysql:cached
-      - ./master.cnf:/etc/mysql/my.cnf:cached
+      -  ~/genius/GeniusStockIntraday/data:/var/lib/mysql:cached
     security_opt:
       - seccomp:unconfined
     logging: 
