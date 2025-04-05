@@ -1,7 +1,7 @@
 name: Realtime Service Deploy
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 env:
@@ -55,8 +55,8 @@ jobs:
           file: DockerfileRealtime
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  deploy-to-xiangcao:
-    name: deploy to xiangcao server
+  deploy-to-server:
+    name: deploy to server
     runs-on: ubuntu-latest
     environment: main
     needs: build-and-push-image
@@ -73,6 +73,8 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
+            docker container stop geniusstockrealtime
+            docker container rm geniusstockrealtime
             docker container run -d --name geniusstockrealtime --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
