@@ -1,7 +1,7 @@
 name: Intraday  Service Deploy
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
@@ -70,8 +70,8 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
-            docker container stop geniusstockintraday
-            docker container rm geniusstockintraday
+#            docker container stop geniusstockintraday
+#            docker container rm geniusstockintraday
             docker container run -d --name geniusstockintraday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
