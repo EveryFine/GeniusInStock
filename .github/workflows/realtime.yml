@@ -5,8 +5,10 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/instockrealtimeservice
+  REGISTRY: ccr.ccs.tencentyun.com
+  REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+  IMAGE_NAME: ${{ github.repository_owner }}/instockrealtimeservice
   TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
@@ -15,6 +17,7 @@ env:
   STOCK_DB_NETWORK: realtimedb_instock_realtime_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
   TARGET_SERVICE_PORT: 9979
+
 
 jobs:
   build-and-push-image:
@@ -34,8 +37,8 @@ jobs:
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
