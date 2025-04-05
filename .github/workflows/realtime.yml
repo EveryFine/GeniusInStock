@@ -1,20 +1,23 @@
-name: Intraday  Service Deploy
+name: Realtime Service Deploy
 on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/instockintradayservice
+  REGISTRY: ccr.ccs.tencentyun.com
+  REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+  IMAGE_NAME: ${{ github.repository_owner }}/instockrealtimeservice
   TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
   TARGET_SSH_PORT: ${{ secrets.XIANGCAO_HUBEI_SSH_PORT }}
-  STOCK_DB_CONTAINER_NAME: GeniusStockIntradayDbService
-  STOCK_DB_NETWORK: intradaydb_instock_intraday_network
+  STOCK_DB_CONTAINER_NAME: GeniusStockRealtimeDbService
+  STOCK_DB_NETWORK: realtimedb_instock_realtime_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
   TARGET_SERVICE_PORT: 9979
+
 
 jobs:
   build-and-push-image:
@@ -34,8 +37,8 @@ jobs:
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -49,11 +52,11 @@ jobs:
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           push: true
-          file: DockerfileIntraday
+          file: DockerfileRealtime
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  deploy-to-xiangcao:
-    name: deploy to xiangcao server
+  deploy-to-server:
+    name: deploy to server
     runs-on: ubuntu-latest
     environment: main
     needs: build-and-push-image
@@ -70,12 +73,12 @@ jobs:
           password: ${{ env.TARGET_SSH_PASSWORD }}
           port: ${{ env.TARGET_SSH_PORT }}
           script: |
-            docker container stop geniusstockintraday
-            docker container rm geniusstockintraday
-            docker container run -d --name geniusstockintraday --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
+            docker container stop geniusstockrealtime
+            docker container rm geniusstockrealtime
+            docker container run -d --name geniusstockrealtime --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 --network ${{ env.STOCK_DB_NETWORK }} \
                 -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
-                -v ~/genius/GeniusStockIntraday/log:/data/InStock/instock/log \
+                -v ~/genius/GeniusStockRealtime/log:/data/InStock/instock/log \
                 -e db_host=${{ env.STOCK_DB_CONTAINER_NAME }} \
                 -e db_password=${{ env.STOCK_DB_PASSWORD }} \
                 ${{needs.build-and-push-image.outputs.output_image_tags}}
