@@ -1,4 +1,4 @@
-name: Volcengine Cloud Hubei Deploy
+name: Volcengine Cloud Deploy
 on:
   push:
     branches: [ "dev" ]
