@@ -1,7 +1,7 @@
 name: XiangCao Cloud Hubei Deploy
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
