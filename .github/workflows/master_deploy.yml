@@ -1,7 +1,7 @@
-name: Volcengine Cloud Deploy
+name: XiangCao Cloud Hubei Sub Deploy
 on:
   push:
-#    branches: [ "dev" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
@@ -9,11 +9,11 @@ env:
   REGISTRY: ccr.ccs.tencentyun.com
   REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
   REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
-  IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservice
-  TARGET_SSH_HOST: ${{ secrets.VOLCENGINE_SSH_HOST }}
-  TARGET_SSH_USER: ${{ secrets.VOLCENGINE_SSH_USER }}
-  TARGET_SSH_PASSWORD: ${{ secrets.VOLCENGINE_SSH_PASSWORD }}
-  TARGET_SSH_PORT: ${{ secrets.VOLCENGINE_SSH_PORT }}
+  IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservicemaster
+  TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_HUBEI_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.XIANGCAO_HUBEI_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockDbService
   STOCK_DB_NETWORK: mariadb_instock_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
@@ -39,8 +39,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.REGISTRY_USERNAME}}
           password: ${{ env.REGISTRY_PASSWORD }}
-#          username: ${{ github.actor }}
-#          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -49,13 +47,6 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix={{branch}}-
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
   deploy-to-server:
     name: deploy to server
     runs-on: ubuntu-latest

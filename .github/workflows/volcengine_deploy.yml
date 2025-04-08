@@ -1,7 +1,7 @@
-name: Volcengine Cloud Deploy
+name: Volcengine Cloud Sub Deploy
 on:
   push:
-#    branches: [ "dev" ]
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
@@ -9,7 +9,7 @@ env:
   REGISTRY: ccr.ccs.tencentyun.com
   REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
   REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
-  IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservice
+  IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservicevolce
   TARGET_SSH_HOST: ${{ secrets.VOLCENGINE_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.VOLCENGINE_SSH_USER }}
   TARGET_SSH_PASSWORD: ${{ secrets.VOLCENGINE_SSH_PASSWORD }}
@@ -49,13 +49,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix={{branch}}-
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+
   deploy-to-server:
     name: deploy to server
     runs-on: ubuntu-latest

@@ -1,13 +1,14 @@
-name: Realtime Service Deploy
+name: Realtime Service Sub Build
 on:
-#  push:
-#    branches: [ "dev" ]
+  push:
+    branches: [ "dev" ]
   workflow_dispatch:
 
 env:
-  REGISTRY: ccr.ccs.tencentyun.com
-  REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+  REGISTRY: ghcr.io
+#  REGISTRY: ccr.ccs.tencentyun.com
+#  REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
+#  REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
   IMAGE_NAME: ${{ github.repository_owner }}/instockrealtimeservice
   TARGET_SSH_HOST: ${{ secrets.XIANGCAO_HUBEI_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.XIANGCAO_HUBEI_SSH_USER }}
@@ -37,8 +38,10 @@ jobs:
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ env.REGISTRY_USERNAME }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+#          username: ${{ env.REGISTRY_USERNAME}}
+#          password: ${{ env.REGISTRY_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -55,32 +58,6 @@ jobs:
           file: DockerfileRealtime
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  deploy-to-server:
-    name: deploy to server
-    runs-on: ubuntu-latest
-    environment: main
-    needs: build-and-push-image
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-    steps:
-      - name: deploying
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ env.TARGET_SSH_HOST }}
-          username: ${{ env.TARGET_SSH_USER }}
-          password: ${{ env.TARGET_SSH_PASSWORD }}
-          port: ${{ env.TARGET_SSH_PORT }}
-          script: |
-            docker container stop geniusstockrealtime
-            docker container rm geniusstockrealtime
-            docker container run -d --name geniusstockrealtime --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
-                --network ${{ env.STOCK_DB_NETWORK }} \
-                -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
-                -v ~/genius/GeniusStockRealtime/log:/data/InStock/instock/log \
-                -e db_host=${{ env.STOCK_DB_CONTAINER_NAME }} \
-                -e db_password=${{ env.STOCK_DB_PASSWORD }} \
-                ${{needs.build-and-push-image.outputs.output_image_tags}}
+
 
 
