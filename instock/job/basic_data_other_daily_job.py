@@ -22,7 +22,7 @@ __date__ = '2023/3/10 '
 log_path = os.path.join(cpath_current, 'log')
 if not os.path.exists(log_path):
     os.makedirs(log_path)
-logging.basicConfig(format='%(asctime)s %(message)s', filename=os.path.join(log_path, 'stock_execute_job.log'))
+logging.basicConfig(format='%(asctime)s %(message)s', filename=os.path.join(log_path, 'basic_data_other_daily_job.log'))
 logging.getLogger().setLevel(logging.INFO)
 current_path = os.path.realpath(__file__)
 file_name = os.path.basename(current_path)
