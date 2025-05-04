@@ -3,7 +3,6 @@ on:
   push:
    branches: [ "dev" ]
   workflow_dispatch:
-
 env:
 #  REGISTRY: ghcr.io
   REGISTRY: crpi-8drjacjx2fl2p1ox.cn-beijing.personal.cr.aliyuncs.com
