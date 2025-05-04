@@ -1,7 +1,7 @@
 name: Volcengine Cloud Deploy
 on:
   push:
-   branches: [ "dev" ]
+   branches: [ "master" ]
   workflow_dispatch:
 env:
 #  REGISTRY: ghcr.io
