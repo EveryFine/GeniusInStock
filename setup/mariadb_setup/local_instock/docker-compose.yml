@@ -11,7 +11,7 @@ services:
       - MARIADB_DATABASE=instockdb
       - TZ=Asia/Shanghai
     volumes:
-      - /Users/zhengshuang/Documents/ProgramingGuide/Python/量化交易/Database/DbBackup/MariadbXiangCao/LocalDB:/var/lib/mysql:cached
+      - ~/Documents/ProgramingGuide/Python/量化交易/Database/DbBackup/MariadbVolcengine/LocalDB:/var/lib/mysql:cached
       - ./slave.cnf:/etc/mysql/my.cnf:cached
     security_opt:
       - seccomp:unconfined

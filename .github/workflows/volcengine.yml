@@ -1,14 +1,14 @@
 name: Volcengine Cloud Deploy
 on:
   push:
-#    branches: [ "dev" ]
+   branches: [ "dev" ]
   workflow_dispatch:
 
 env:
 #  REGISTRY: ghcr.io
-  REGISTRY: ccr.ccs.tencentyun.com
-  REGISTRY_USERNAME: ${{ secrets.TENCENT_REGISTRY_USERNAME }}
-  REGISTRY_PASSWORD: ${{ secrets.TENCENT_REGISTRY_PASSWORD }}
+  REGISTRY: crpi-8drjacjx2fl2p1ox.cn-beijing.personal.cr.aliyuncs.com
+  REGISTRY_USERNAME: ${{ secrets.ALI_REGISTRY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.ALI_REGISTRY_PASSWORD }}
   IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservice
   TARGET_SSH_HOST: ${{ secrets.VOLCENGINE_SSH_HOST }}
   TARGET_SSH_USER: ${{ secrets.VOLCENGINE_SSH_USER }}

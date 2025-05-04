@@ -11,13 +11,13 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - ~/genius/GeniusStock/data:/var/lib/mysql
-#      - ./master.cnf:/etc/mysql/my.cnf:cached
-#    security_opt:
-#      - seccomp:unconfined
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "500m"
+      - ./master.cnf:/etc/mysql/my.cnf:cached
+    security_opt:
+      - seccomp:unconfined
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
     networks:
       - instock_network
 
