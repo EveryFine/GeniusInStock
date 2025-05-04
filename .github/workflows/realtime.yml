@@ -1,7 +1,7 @@
 name: Realtime Service Deploy
 on:
-  push:
-    branches: [ "master" ]
+#  push:
+#    branches: [ "dev" ]
   workflow_dispatch:
 
 env:

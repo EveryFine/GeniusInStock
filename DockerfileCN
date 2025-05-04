@@ -17,7 +17,11 @@ EXPOSE 9988
 # 安装 依赖库
 # apt-get autoremove -y 删除没有用的依赖lib
 # apt-get --purge remove 软件包名称 , 删除已安装包（不保留配置文件)
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+RUN sed -i "s@http://\(deb\|security\).debian.org@https://mirrors.aliyun.com@g" /etc/apt/sources.list && \
+    echo  "[global]\n\
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple\n\
+trusted-host = pypi.tuna.tsinghua.edu.cn" > /etc/pip.conf && \
+    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     apt-get update && \
     apt-get install -y cron gcc make python3-dev default-libmysqlclient-dev build-essential pkg-config curl && \
@@ -62,7 +66,7 @@ RUN chmod 755 /data/InStock/instock/bin/run_*.sh && \
     echo "SHELL=/bin/sh \n\
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin \n\
 # min hour day month weekday command \n\
-# */30 9,10,11,13,14,15 * * 1-5 /bin/run-parts /etc/cron.hourly \n\
+*/30 9,10,11,13,14,15 * * 1-5 /bin/run-parts /etc/cron.hourly \n\
 30 19 * * 1-5 /bin/run-parts /etc/cron.workdayly \n\
 30 22 * * 3,6 /bin/run-parts /etc/cron.monthly \n" > /var/spool/cron/crontabs/root && \
     chmod 600 /var/spool/cron/crontabs/root
