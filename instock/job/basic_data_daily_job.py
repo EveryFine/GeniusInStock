@@ -69,7 +69,8 @@ def save_nph_etf_spot_data(date, before=True):
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_ETF_SPOT['columns'])
-
+        # 数据去重
+        data = data.drop_duplicates(subset="code", keep="last")
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
         logging.info(f"{file_name}:insert {table_name} data, date:{date}, count:{len(data)}")
     except Exception as e:
