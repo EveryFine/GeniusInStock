@@ -43,7 +43,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     make && \
     make install && \
     cd .. && \
-    pip install TA-Lib==0.5.1 && \
+    pip install TA-Lib==0.6.4 && \
     rm -rf ta-lib* && \
     apt-get --purge remove -y gcc make python3-dev default-libmysqlclient-dev curl && \
     rm -rf /root/.cache/* && rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get autoclean && apt-get autoremove -y
