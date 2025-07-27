@@ -5,6 +5,8 @@ import logging
 import concurrent.futures
 import os.path
 import sys
+import datetime
+
 import pandas as pd
 
 cpath_current = os.path.dirname(os.path.dirname(__file__))
@@ -58,7 +60,7 @@ def save_nph_stock_fund_flow_data(date, before=True):
         return
 
     try:
-        times = tuple(range(4))
+        times = tuple(range(1))
         results = run_check_stock_fund_flow(times)
         if results is None:
             return
@@ -136,7 +138,7 @@ def save_nph_stock_sector_fund_flow_data(date, before=True):
 
 def stock_sector_fund_flow_data(date, index_sector):
     try:
-        times = tuple(range(3))
+        times = tuple(range(1))
         results = run_check_stock_sector_fund_flow(index_sector, times)
         if results is None:
             return
@@ -304,6 +306,8 @@ def main():
 
 # main函数入口
 if __name__ == '__main__':
-    main()
+    # main()
     # save_nph_stock_sector_fund_flow_data('2025-03-25')
     # save_nph_stock_fund_flow_data(datetime.date.today(),before=False)
+
+    save_nph_stock_sector_fund_flow_data(datetime.date.today(), before=False)
