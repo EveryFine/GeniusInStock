@@ -561,11 +561,11 @@ def stock_zh_a_hist_pre_min_em(
 
 
 if __name__ == "__main__":
-    stock_zh_a_spot_em_df = stock_zh_a_spot_em()
-    print(stock_zh_a_spot_em_df)
-
-    code_id_map_em_df = code_id_map_em()
-    print(code_id_map_em_df)
+    # stock_zh_a_spot_em_df = stock_zh_a_spot_em()
+    # print(stock_zh_a_spot_em_df)
+    #
+    # code_id_map_em_df = code_id_map_em()
+    # print(code_id_map_em_df)
 
     stock_zh_a_hist_df = stock_zh_a_hist(
         symbol="430090",
@@ -574,21 +574,22 @@ if __name__ == "__main__":
         end_date="20220722",
         adjust="hfq",
     )
+    stock_zh_a_hist_df.to_csv("stock_zh_a_hist_430090_20220516_20220722_hfq.csv")
     print(stock_zh_a_hist_df)
 
-    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(symbol="833454", period="1")
-    print(stock_zh_a_hist_min_em_df)
-
-    stock_zh_a_hist_pre_min_em_df = stock_zh_a_hist_pre_min_em(symbol="833454")
-    print(stock_zh_a_hist_pre_min_em_df)
-
-    stock_zh_a_spot_em_df = stock_zh_a_spot_em()
-    print(stock_zh_a_spot_em_df)
-
-    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(
-        symbol="000001", period='1'
-    )
-    print(stock_zh_a_hist_min_em_df)
+    # stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(symbol="833454", period="1")
+    # print(stock_zh_a_hist_min_em_df)
+    #
+    # stock_zh_a_hist_pre_min_em_df = stock_zh_a_hist_pre_min_em(symbol="833454")
+    # print(stock_zh_a_hist_pre_min_em_df)
+    #
+    # stock_zh_a_spot_em_df = stock_zh_a_spot_em()
+    # print(stock_zh_a_spot_em_df)
+    #
+    # stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(
+    #     symbol="000001", period='1'
+    # )
+    # print(stock_zh_a_hist_min_em_df)
 
     stock_zh_a_hist_df = stock_zh_a_hist(
         symbol="833454",
@@ -597,5 +598,6 @@ if __name__ == "__main__":
         end_date="20211115",
         adjust="hfq",
     )
+    stock_zh_a_hist_df.to_csv("stock_zh_a_hist_833454_20170301_20211115_hfq.csv")
     print(stock_zh_a_hist_df)
 
