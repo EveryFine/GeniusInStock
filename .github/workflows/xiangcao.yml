@@ -1,0 +1,86 @@
+name: Xiangcao Cloud Deploy
+on:
+  push:
+   branches: [ "dev" ]
+  workflow_dispatch:
+env:
+#  REGISTRY: ghcr.io
+  REGISTRY: crpi-8drjacjx2fl2p1ox.cn-beijing.personal.cr.aliyuncs.com
+  REGISTRY_USERNAME: ${{ secrets.ALI_REGISTRY_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.ALI_REGISTRY_PASSWORD }}
+  IMAGE_NAME: ${{ github.repository_owner }}/geniusstockservice
+  TARGET_SSH_HOST: ${{ secrets.XIANGCAO_SSH_HOST }}
+  TARGET_SSH_USER: ${{ secrets.XIANGCAO_SSH_USER }}
+  TARGET_SSH_PASSWORD: ${{ secrets.XIANGCAO_SSH_PASSWORD }}
+  TARGET_SSH_PORT: ${{ secrets.XIANGCAO_SSH_PORT }}
+  STOCK_DB_CONTAINER_NAME: GeniusStockDbService
+  STOCK_DB_NETWORK: mariadb_instock_network
+  STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
+  TARGET_SERVICE_PORT: 9989
+
+jobs:
+  build-and-push-image:
+    name: Build Docker image and push to repositories
+    runs-on: ubuntu-latest
+    environment: main
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+    outputs:
+      output_image_tags: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY_USERNAME}}
+          password: ${{ env.REGISTRY_PASSWORD }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix={{branch}}-
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  deploy-to-server:
+    name: deploy to server
+    runs-on: ubuntu-latest
+    environment: main
+    needs: build-and-push-image
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+    steps:
+      - name: deploying
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ env.TARGET_SSH_HOST }}
+          username: ${{ env.TARGET_SSH_USER }}
+          password: ${{ env.TARGET_SSH_PASSWORD }}
+          port: ${{ env.TARGET_SSH_PORT }}
+          script: |
+            docker container stop geniusstock
+            docker container rm geniusstock
+            docker container run -d --name geniusstock --link=${{ env.STOCK_DB_CONTAINER_NAME }} \
+                --network ${{ env.STOCK_DB_NETWORK }} \
+                -p ${{ env.TARGET_SERVICE_PORT }}:9988 \
+                -v ~/genius/GeniusStock/log:/data/InStock/instock/log \
+                -e db_host=${{ env.STOCK_DB_CONTAINER_NAME }} \
+                -e db_password=${{ env.STOCK_DB_PASSWORD }} \
+                ${{needs.build-and-push-image.outputs.output_image_tags}}
+
+
