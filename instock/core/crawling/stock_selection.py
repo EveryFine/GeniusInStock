@@ -2,6 +2,8 @@
 # !/usr/bin/env python
 
 import math
+import time
+
 import pandas as pd
 import requests
 import instock.core.tablestructure as tbs
@@ -48,6 +50,7 @@ def stock_selection() -> pd.DataFrame:
         _data = data_json["result"]["data"]
         data.extend(_data)
         page_count =page_count - 1
+        time.sleep(10)
 
     temp_df = pd.DataFrame(data)
 

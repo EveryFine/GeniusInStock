@@ -1,7 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-
-
+import datetime
 import logging
 import pandas as pd
 import os.path
@@ -49,4 +48,5 @@ def main():
 
 # main函数入口
 if __name__ == '__main__':
-    main()
+    # main()
+    save_nph_stock_selection_data(datetime.datetime.now().date(),before=False)

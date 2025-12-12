@@ -174,7 +174,7 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
     temp_df["总市值"] = pd.to_numeric(temp_df["总市值"], errors="coerce")
     temp_df["流通市值"] = pd.to_numeric(temp_df["流通市值"], errors="coerce")
     temp_df["上市时间"] = pd.to_datetime(temp_df["上市时间"], format='%Y%m%d', errors="coerce")
-
+    temp_df.to_csv("stock_zh_a_spot_em.csv", index=False)
     return temp_df
 
 
@@ -561,7 +561,7 @@ def stock_zh_a_hist_pre_min_em(
 
 
 if __name__ == "__main__":
-    # stock_zh_a_spot_em_df = stock_zh_a_spot_em()
+    stock_zh_a_spot_em_df = stock_zh_a_spot_em()
     # print(stock_zh_a_spot_em_df)
     #
     # code_id_map_em_df = code_id_map_em()
@@ -570,8 +570,8 @@ if __name__ == "__main__":
     stock_zh_a_hist_df = stock_zh_a_hist(
         symbol="430090",
         period="daily",
-        start_date="20220516",
-        end_date="20220722",
+        start_date="20230516",
+        end_date="20230722",
         adjust="hfq",
     )
     stock_zh_a_hist_df.to_csv("stock_zh_a_hist_430090_20220516_20220722_hfq.csv")

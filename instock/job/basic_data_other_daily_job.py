@@ -308,6 +308,6 @@ def main():
 if __name__ == '__main__':
     # main()
     # save_nph_stock_sector_fund_flow_data('2025-03-25')
-    # save_nph_stock_fund_flow_data(datetime.date.today(),before=False)
+    save_nph_stock_fund_flow_data(datetime.date.today(),before=False)
 
-    save_nph_stock_sector_fund_flow_data(datetime.date.today(), before=False)
+    # save_nph_stock_sector_fund_flow_data(datetime.date.today(), before=False)
