@@ -29,6 +29,29 @@ logging.getLogger().setLevel(logging.INFO)
 current_path = os.path.realpath(__file__)
 file_name = os.path.basename(current_path)
 # 每日股票龙虎榜
+def save_nph_stock_lhb_data(date, before=True):
+    if before:
+        return
+
+    try:
+        data = stf.fetch_stock_lhb_data(date)
+        if data is None or len(data.index) == 0:
+            return
+
+        table_name = tbs.TABLE_CN_STOCK_lHB['name']
+        # 删除老数据。
+        if mdb.checkTableIsExist(table_name):
+            del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
+            mdb.executeSql(del_sql)
+            cols_type = None
+        else:
+            cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_lHB['columns'])
+        mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
+    except Exception as e:
+        logging.error(f"basic_data_other_daily_job.save_stock_lhb_data处理异常：{e}")
+    stock_spot_buy(date)
+
+# 每日股票龙虎榜(新浪)
 def save_nph_stock_top_data(date, before=True):
     if before:
         return
@@ -296,7 +319,7 @@ def stock_imitup_reason_data(date):
         logging.error(f"basic_data_other_daily_job.stock_imitup_reason_data：{e}")
 
 def main():
-    runt.run_with_args(save_nph_stock_top_data)
+    runt.run_with_args(save_nph_stock_lhb_data)
     runt.run_with_args(save_nph_stock_bonus)
     runt.run_with_args(save_nph_stock_fund_flow_data)
     runt.run_with_args(save_nph_stock_sector_fund_flow_data)

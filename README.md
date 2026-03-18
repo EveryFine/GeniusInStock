@@ -1,10 +1,12 @@
+[对应IMA知识库](https://ima.qq.com/wiki/?shareId=8b0da768c77bc863f1cad8eb9482e37a6eeb26ad7171523b687d48c1a67c8e2c)：专业量化级股票因子池，每日更新全网全域股票数据，个股信息覆盖超2200个维度栏目，为个股精选提供高维度、高质量的数据核心支撑。 https://ima.qq.com/wiki/?shareId=8b0da768c77bc863f1cad8eb9482e37a6eeb26ad7171523b687d48c1a67c8e2c 。
+
 **InStock股票系统**
 
 InStock股票系统，抓取每日股票、ETF关键数据，计算股票技术指标、筹码分布，识别K线各种形态，综合选股，内置多种选股策略，支持选股验证回测，支持自动交易，支持批量时间，运行高效，支持PC、平板、手机移动设备显示，同时提供Docker镜像方便安装，是量化投资的好帮手。
 
 The stock system,Capture key data on daily stocks and ETFs, calculate stock technical indicators, chip distribution, Position Cost Distribution(CYQ), identify various K-line forms, comprehensive stock selection, built-in multiple stock selection strategies, support stock selection verification and backtesting, support automatic trading, and support batch time , runs efficiently, supports display on PCs, tablets, and mobile phones, and provides Docker images for easy installation, making it a good helper for quantitative investment.
 
-Docker镜像：https://hub.docker.com/r/mayanghua/instock **镜像优化构建仅170M**。
+Docker镜像：https://hub.docker.com/r/mayanghua/instock 。
 
 # 功能介绍
 
@@ -204,24 +206,27 @@ K线形态作业 klinepattern_data_daily_job.py
 策略数据作业 python strategy_data_daily_job.py
 回测数据 python backtest_data_daily_job.py
 ```
+## 十二：支持代理及Cookie
 
-## 十二：存储采用数据库设计
+支持多代理获取数据。由于很多网站对大量请求有防护机制，使用单一IP地址频繁访问可能导致被封禁或限制访问。代理IP能够帮助分散请求来源，避免单一IP被封锁，从而保证爬虫程序的稳定运行。
+支持注入Cookie，解决数据获取频率过高，限制数据获取。
+## 十三：存储采用数据库设计
 
 数据存储采用数据库设计，能保存历史数据，以及对数据进行扩展分析、统计、挖掘。系统实现自动创建数据库、数据表，封装了批量更新、插入数据，方便业务扩展。
 
 ![](img/07.jpg)
 
-## 十三：展示采用web设计
+## 十四：展示采用web设计
 
 采用web设计，可视化展示结果。对展示进行封装，添加新的业务表单，只需要配置视图字典就可自动出现业务可视化界面，方便业务功能扩展。
 
-## 十四：运行高效
+## 十五：运行高效
 
 
 采用多线程、单例共享资源有效提高运算效率。1天数据的抓取、计算指标、形态识别、策略选股、回测等全部任务运行时间大概4分钟（普通笔记本），计算天数越多效率越高。
 
 
-## 十五：方便调试
+## 十六：方便调试
 
 系统运行的重要日志记录在stock_execute_job.log(数据抓取、处理、分析)、stock_web.log(web服务)、stock_trade.log(交易服务)，方便调试发现问题。
 
@@ -277,14 +282,14 @@ a.安装依赖库：
 
 ```
 #dos切换到本系统的根目录，执行下面命令：
-python pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 b.若想升级项目依赖库至最新版，可以通过下面方法：
 
 先打开requirements.txt，然后修改文件中的“==”为“>=”，接着执行下面命令：
 
 ```
-python pip install -r requirements.txt --upgrade
+python -m pip install -r requirements.txt --upgrade
 ```
 
 c.若扩展了本项目，可以通过下面方法生成项目依赖：
@@ -292,10 +297,10 @@ c.若扩展了本项目，可以通过下面方法生成项目依赖：
 ```
 #使用pipreqs生成项目相关依赖的requirements.txt
 
-python pip install pipreqs
+python -m pip install pipreqs
 # 安装pipreqs，若有安装可跳过
 
-python  pipreqs --encoding utf-8 --force ./ 
+python -m pipreqs --encoding utf-8 --force ./ 
 # 本项目是utf-8编码
 ```
 
@@ -325,7 +330,52 @@ db_port = 3306  # 数据库服务端口
 db_charset = "utf8mb4"  # 数据库字符集
 ```
 
-### 7.安装自动交易（可选）
+### 7.配置代理
+不使用代理，跳过本步。
+
+具体设置如下：
+编辑proxy.txt，添加有效代理，格式为：ip:port，带认证代理username:password@ip:port，每个代理占一行。当不使用代理时清空该文件。
+编辑保存完代理文件，若本系统已经启动，需要重启本系统，才能生效。
+示例代理：
+```
+127.0.0.1:7860
+52.13.248.29:3128
+35.178.104.4:80
+abc:123456@65.1.244.232:3128
+13.126.79.133:80
+54.212.22.168:3128
+```
+注意：以上均为无效代理。
+
+### 8.设置东方财富网Cookie
+东方财富数据获取频率过高，会限制获取数据，可以通过注入cookie解决。
+以下是详细的操作步骤：
+```
+1、获取Cookie
+    打开浏览器，访问东方财富网行情页面：https://quote.eastmoney.com/center/gridlist.html#hs_a_board
+    登录账号（如果有东方财富网账号，建议登录以获取更稳定的Cookie）
+    打开开发者工具：
+    切换到Network（网络）选项卡
+    刷新页面（按 F5 或点击浏览器刷新按钮）
+    选择任意请求：在网络请求列表中，选择任意一个请求（建议选择URL包含 push2.eastmoney.com 的请求）
+    查看Cookie：在请求详情中，找到 Request Headers（请求头）部分，复制完整的 Cookie 值
+    保存Cookie：将复制的Cookie值保存下来，稍后使用
+2、设置Cookie的两种方式
+    方式一：通过环境变量设置（推荐）
+    Windows系统：
+    cmd命令： setx EAST_MONEY_COOKIE "你的Cookie值"
+    重启Python环境：设置环境变量后，需要重启Python IDE或命令提示符窗口
+    Linux/macOS系统：
+    bash命令：export EAST_MONEY_COOKIE="你的Cookie值"
+    注意：这种方式只在当前终端会话有效，若要永久设置，需要编辑 ~/.bashrc 或 ~/.zshrc 文件
+    方式二：通过文件设置
+    编辑eastmoney_cookie.txt文件，替换Cookie。
+3、注意事项
+    Cookie有效期：东方财富网的Cookie通常会在一段时间后过期（一般为几天到几周），如突然无法正常工作，可能是Cookie过期了，需要重新获取并设置
+    定期更新：建议每隔一段时间（如每周）更新一次Cookie，以确保爬取的稳定性
+    多账号轮换：如果有多个东方财富网账号，可以轮换使用不同账号的Cookie，进一步降低被限制的风险
+```
+### 9.安装自动交易（可选）
 
 ```
 1.安装交易软件
@@ -356,9 +406,9 @@ db_charset = "utf8mb4"  # 数据库字符集
         详情参阅usage.md，配置对应券商
 ```
 
-### 8.运行说明
+### 10.运行说明
 
-#### 8.1.执行数据抓取、处理、分析、识别
+#### 10.1.执行数据抓取、处理、分析、识别
 
 支持批量作业，具体参见run_job.bat中的注释说明。
 
@@ -384,14 +434,14 @@ db_charset = "utf8mb4"  # 数据库字符集
 #基础数据作业 
 python basic_data_daily_job.py
 ```
-#### 8.2.启动web服务
+#### 10.2.启动web服务
 
 ```
 运行 run_web.bat
 ```
 启动服务后，打开浏览器，输入：http://localhost:9988/ ，即可使用本系统的可视化功能。
 
-#### 8.3.启动交易服务
+#### 10.3.启动交易服务
 
 ```
 运行 run_trade.bat
@@ -401,7 +451,40 @@ python basic_data_daily_job.py
 
 没有docker环境，可以参考：[VirtualBox虚拟机安装Ubuntu](https://www.ljjyy.com/archives/2019/10/100590.html)，里面也介绍了python、docker等常用软件的安装，若想在Windows下安装docker自行百度。
 
-### 1.安装数据库镜像
+### 1.配置代理
+不使用代理，跳过本步。
+
+系统安装完成后，可以通过编辑宿主机的代理文件，来配置代理。
+
+具体设置如下：
+编辑宿主的代理文件，添加有效代理，格式为：ip:port，带认证代理username:password@ip:port，每个代理占一行。当不使用代理时清空该文件。
+编辑完代理文件，若本系统已经启动，需要重启本系统，才能生效。
+示例创建代理：
+```
+sudo sh -c 'echo "127.0.0.1:7860" > /data/instockproxy.txt'
+#创建代理文件，会自动替换掉原代理文件
+
+sudo sh -c 'echo "52.13.248.29:3128" >> /data/instockproxy.txt'
+#追加代理
+
+sudo sh -c 'echo "abc:123456@35.178.104.4:80" >> /data/instockproxy.txt'
+#追加代理
+```
+注意：以上均为无效代理。
+
+### 2.配置东方财富网Cookie
+不使用Cookie，跳过本步。
+
+系统安装完成后，可以通过编辑宿主机的代理文件，来配置Cookie。
+详细请参阅：常规安装方式，设置东方财富网Cookie。
+
+```
+sudo sh -c 'echo "你的Cookie值" > /data/eastmoneycookie.txt'
+#创建代理文件，会自动替换掉原代理文件
+
+```
+
+### 3.安装数据库镜像
 
 如果已经有Mysql、mariadb数据库可以跳过本步。
 
@@ -410,19 +493,24 @@ python basic_data_daily_job.py
 **特别提醒：执行命令的用户要有root权限，其他命令也如此。例如：ubuntu系统在命令前加上sudo** ，sudo docker......
 
 ```
+docker network create InStockService
+
 docker run -d --name InStockDbService \
+    --network InStockService \
     -v /data/mariadb/data:/var/lib/instockdb \
     -e MYSQL_ROOT_PASSWORD=root \
     library/mariadb:latest
 ```
 
-### 2.安装本系统镜像
+### 4.安装本系统镜像
 
 a.若按上面【1.安装数据库镜像】装的数据库，运行下面命令：
 
 ```
-docker run -dit --name InStock --link=InStockDbService \
+docker run -dit --name InStock --network=InStockService \
     -p 9988:9988 \
+    -v /data/instockproxy.txt:/data/InStock/instock/config/proxy.txt \
+    -v /data/eastmoneycookie.txt:/data/InStock/instock/config/eastmoney_cookie.txt \
     -e db_host=InStockDbService \
     mayanghua/instock:latest
 ```
@@ -432,6 +520,8 @@ b.已经有Mysql、mariadb数据库，运行下面命令：
 ```
 docker run -dit --name InStock \
     -p 9988:9988 \
+    -v /data/instockproxy.txt:/data/InStock/instock/config/proxy.txt \
+    -v /data/eastmoneycookie.txt:/data/InStock/instock/config/eastmoney_cookie.txt \
     -e db_host=localhost \
     -e db_user=root \
     -e db_password=root \
@@ -450,13 +540,13 @@ db_port       # 数据库服务端口
 ```
 按自己数据库实际情况配置参数。
 
-### 3. 系统运行
+### 5. 系统运行
 
 启动容器后，会自动运行，首先会初始化数据、启动web服务。然后每小时执行“基础数据抓取”，每天17:30执行所有的数据抓取、处理、分析、识别、回测。
 
 打开浏览器，输入：http://localhost:9988/ ，即可使用本系统的可视化功能。
 
-### 4.历史数据
+### 6.历史数据
 
 历史数据抓取、处理、分析、识别、回测，运行下面命令：
 
@@ -484,7 +574,7 @@ python execute_daily_job.py 2023-03-01,2023-03-02
 修改run_job.sh，然后运行 bash InStock/instock/bin/run_job.sh
 ```
 
-### 5.查看日志
+### 7.查看日志
 
 运行下面命令：
 
@@ -494,7 +584,7 @@ cat InStock/instock/log/stock_execute_job.log
 cat InStock/instock/log/stock_web.log
 ```
 
-### 6.docker常用命令
+### 8.docker常用命令
 
 ```
 docker container stop InStock InStockDbService
@@ -507,7 +597,7 @@ docker rmi mayanghua/instock:latest library/mariadb:latest
 
 具体参见：[Docker基础之 二.镜像及容器的基本操作](https://www.ljjyy.com/archives/2018/06/100208.html)
 
-### 7.自动交易
+### 9.自动交易
 
 目前只支持windows。参考常规安装方式,只需安装python、依赖库，**不需安装mysql、talib等**。
 

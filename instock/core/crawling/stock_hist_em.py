@@ -4,11 +4,19 @@
 Date: 2022/6/19 15:26
 Desc: 东方财富网-行情首页-沪深京 A 股
 """
-import requests
+import random
+import time
+
 import pandas as pd
 import math
 from functools import lru_cache
+from instock.core.eastmoney_fetcher import eastmoney_fetcher
 
+__author__ = 'myh '
+__date__ = '2025/12/31 '
+
+# 创建全局实例，供所有函数使用
+fetcher = eastmoney_fetcher()
 
 def stock_zh_a_spot_em() -> pd.DataFrame:
     """
@@ -33,7 +41,7 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
         "fields": "f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f26,f37,f38,f39,f40,f41,f45,f46,f48,f49,f57,f61,f100,f112,f113,f114,f115,f221",
         "_": "1623833739532",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     data = data_json["data"]["diff"]
     if not data:
@@ -42,9 +50,11 @@ def stock_zh_a_spot_em() -> pd.DataFrame:
     data_count = data_json["data"]["total"]
     page_count = math.ceil(data_count/page_size)
     while page_count > 1:
+        # 添加随机延迟，避免爬取过快
+        time.sleep(random.uniform(1, 1.5))
         page_current = page_current + 1
         params["pn"] = page_current
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         _data = data_json["data"]["diff"]
         data.extend(_data)
@@ -202,7 +212,7 @@ def code_id_map_em() -> dict:
         "fields": "f12",
         "_": "1623833739532",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     data = data_json["data"]["diff"]
     if not data:
@@ -211,9 +221,11 @@ def code_id_map_em() -> dict:
     data_count = data_json["data"]["total"]
     page_count = math.ceil(data_count/page_size)
     while page_count > 1:
+        # 添加随机延迟，避免爬取过快
+        time.sleep(random.uniform(1, 1.5))
         page_current = page_current + 1
         params["pn"] = page_current
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         _data = data_json["data"]["diff"]
         data.extend(_data)
@@ -237,7 +249,7 @@ def code_id_map_em() -> dict:
         "fields": "f12",
         "_": "1623833739532",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     data = data_json["data"]["diff"]
     if not data:
@@ -246,9 +258,11 @@ def code_id_map_em() -> dict:
     data_count = data_json["data"]["total"]
     page_count = math.ceil(data_count/page_size)
     while page_count > 1:
+        # 添加随机延迟，避免爬取过快
+        time.sleep(random.uniform(1, 1.5))
         page_current = page_current + 1
         params["pn"] = page_current
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         _data = data_json["data"]["diff"]
         data.extend(_data)
@@ -271,7 +285,7 @@ def code_id_map_em() -> dict:
         "fields": "f12",
         "_": "1623833739532",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     data = data_json["data"]["diff"]
     if not data:
@@ -280,9 +294,11 @@ def code_id_map_em() -> dict:
     data_count = data_json["data"]["total"]
     page_count = math.ceil(data_count/page_size)
     while page_count > 1:
+        # 添加随机延迟，避免爬取过快
+        time.sleep(random.uniform(1, 1.5))
         page_current = page_current + 1
         params["pn"] = page_current
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         _data = data_json["data"]["diff"]
         data.extend(_data)
@@ -332,7 +348,7 @@ def stock_zh_a_hist(
         "end": end_date,
         "_": "1623766962675",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     if not (data_json["data"] and data_json["data"]["klines"]):
         return pd.DataFrame()
@@ -409,7 +425,7 @@ def stock_zh_a_hist_min_em(
             "secid": f"{code_id_dict[symbol]}.{symbol}",
             "_": "1623766962675",
         }
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(
             [item.split(",") for item in data_json["data"]["trends"]]
@@ -449,7 +465,7 @@ def stock_zh_a_hist_min_em(
             "end": "20500000",
             "_": "1630930917857",
         }
-        r = requests.get(url, params=params)
+        r =  fetcher.make_request(url, params=params)
         data_json = r.json()
         temp_df = pd.DataFrame(
             [item.split(",") for item in data_json["data"]["klines"]]
@@ -528,7 +544,7 @@ def stock_zh_a_hist_pre_min_em(
         "secid": f"{code_id_dict[symbol]}.{symbol}",
         "_": "1623766962675",
     }
-    r = requests.get(url, params=params)
+    r =  fetcher.make_request(url, params=params)
     data_json = r.json()
     temp_df = pd.DataFrame(
         [item.split(",") for item in data_json["data"]["trends"]]
@@ -568,7 +584,7 @@ if __name__ == "__main__":
     # print(code_id_map_em_df)
 
     stock_zh_a_hist_df = stock_zh_a_hist(
-        symbol="430090",
+        symbol="000001",
         period="daily",
         start_date="20230516",
         end_date="20230722",
@@ -590,9 +606,22 @@ if __name__ == "__main__":
     #     symbol="000001", period='1'
     # )
     # print(stock_zh_a_hist_min_em_df)
+    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(symbol="000001", period="1")
+    print(stock_zh_a_hist_min_em_df)
+
+    stock_zh_a_hist_pre_min_em_df = stock_zh_a_hist_pre_min_em(symbol="000001")
+    print(stock_zh_a_hist_pre_min_em_df)
+
+    stock_zh_a_spot_em_df = stock_zh_a_spot_em()
+    print(stock_zh_a_spot_em_df)
+
+    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(
+        symbol="000001", period='1'
+    )
+    print(stock_zh_a_hist_min_em_df)
 
     stock_zh_a_hist_df = stock_zh_a_hist(
-        symbol="833454",
+        symbol="000001",
         period="daily",
         start_date="20170301",
         end_date="20211115",
