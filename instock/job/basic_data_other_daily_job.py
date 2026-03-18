@@ -5,6 +5,8 @@ import logging
 import concurrent.futures
 import os.path
 import sys
+import datetime
+
 import pandas as pd
 
 cpath_current = os.path.dirname(os.path.dirname(__file__))
@@ -18,6 +20,14 @@ import instock.core.stockfetch as stf
 __author__ = 'myh '
 __date__ = '2023/3/10 '
 
+
+log_path = os.path.join(cpath_current, 'log')
+if not os.path.exists(log_path):
+    os.makedirs(log_path)
+logging.basicConfig(format='%(asctime)s %(message)s', filename=os.path.join(log_path, 'basic_data_other_daily_job.log'))
+logging.getLogger().setLevel(logging.INFO)
+current_path = os.path.realpath(__file__)
+file_name = os.path.basename(current_path)
 # 每日股票龙虎榜
 def save_nph_stock_lhb_data(date, before=True):
     if before:
@@ -56,10 +66,12 @@ def save_nph_stock_top_data(date, before=True):
         if mdb.checkTableIsExist(table_name):
             del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
             mdb.executeSql(del_sql)
+            logging.info(f"{file_name}:delete {table_name} data, sql:{del_sql}")
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_TOP['columns'])
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
+        logging.info(f"{file_name}:insert {table_name} data, date:{date}, count:{len(data)}")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.save_stock_top_data处理异常：{e}")
     stock_spot_buy(date)
@@ -71,7 +83,7 @@ def save_nph_stock_fund_flow_data(date, before=True):
         return
 
     try:
-        times = tuple(range(4))
+        times = tuple(range(1))
         results = run_check_stock_fund_flow(times)
         if results is None:
             return
@@ -89,17 +101,21 @@ def save_nph_stock_fund_flow_data(date, before=True):
             return
 
         data.insert(0, 'date', date.strftime("%Y-%m-%d"))
+        # 数据去重
+        data = data.drop_duplicates(subset="code", keep="last")
 
         table_name = tbs.TABLE_CN_STOCK_FUND_FLOW['name']
         # 删除老数据。
         if mdb.checkTableIsExist(table_name):
             del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
             mdb.executeSql(del_sql)
+            logging.info(f"{file_name}:delete {table_name} data, sql:{del_sql}")
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_FUND_FLOW['columns'])
 
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
+        logging.info(f"{file_name}:insert {table_name} data, date:{date}, count:{len(data)}")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.save_nph_stock_fund_flow_data处理异常：{e}")
 
@@ -145,7 +161,7 @@ def save_nph_stock_sector_fund_flow_data(date, before=True):
 
 def stock_sector_fund_flow_data(date, index_sector):
     try:
-        times = tuple(range(3))
+        times = tuple(range(1))
         results = run_check_stock_sector_fund_flow(index_sector, times)
         if results is None:
             return
@@ -171,12 +187,15 @@ def stock_sector_fund_flow_data(date, index_sector):
         # 删除老数据。
         if mdb.checkTableIsExist(table_name):
             del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
+            logging.info(f"{file_name}:delete {table_name} data, sql:{del_sql}")
             mdb.executeSql(del_sql)
+
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs_table['columns'])
-
+        data = data.drop_duplicates(subset="name", keep="last")
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`name`")
+        logging.info(f"{file_name}:insert {table_name} data data, date:{date}, count:{len(data)}")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.stock_sector_fund_flow_data处理异常：{e}")
 
@@ -217,10 +236,13 @@ def save_nph_stock_bonus(date, before=True):
         if mdb.checkTableIsExist(table_name):
             del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
             mdb.executeSql(del_sql)
+            logging.info(f"{file_name}:Delete {table_name} data, sql:{del_sql}")
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_BONUS['columns'])
+        data = data.drop_duplicates(subset="code", keep="last")
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
+        logging.info(f"{file_name}:Insert {table_name} data, date:{date}, count:{len(data)}")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.save_nph_stock_bonus处理异常：{e}")
 
@@ -244,11 +266,13 @@ def stock_spot_buy(date):
         if mdb.checkTableIsExist(table_name):
             del_sql = f"DELETE FROM `{table_name}` where `date` = '{date}'"
             mdb.executeSql(del_sql)
+            logging.info(f"{file_name}:Delete {table_name} data, sql:{del_sql}")
             cols_type = None
         else:
             cols_type = tbs.get_field_types(tbs.TABLE_CN_STOCK_SPOT_BUY['columns'])
 
         mdb.insert_db_from_df(data, table_name, cols_type, False, "`date`,`code`")
+        logging.info(f"{file_name}:Insert {table_name} data, date:{date}, count:{len(data)}")
     except Exception as e:
         logging.error(f"basic_data_other_daily_job.stock_spot_buy处理异常：{e}")
 
@@ -305,4 +329,8 @@ def main():
 
 # main函数入口
 if __name__ == '__main__':
-    main()
+    # main()
+    # save_nph_stock_sector_fund_flow_data('2025-03-25')
+    save_nph_stock_fund_flow_data(datetime.date.today(),before=False)
+
+    # save_nph_stock_sector_fund_flow_data(datetime.date.today(), before=False)

@@ -1,0 +1,26 @@
+version: "3"
+services: 
+  mariadb-master:
+    image: mariadb:latest
+    container_name: GeniusStockDbService
+    restart: always
+    ports:
+      - "33060:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MY_MARIADB_PASSWORD}
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./master.cnf:/etc/mysql/my.cnf:cached
+    security_opt:
+      - seccomp:unconfined
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+    networks:
+      - instock_network
+
+networks:
+  instock_network:
+    driver: bridge

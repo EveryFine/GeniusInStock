@@ -94,6 +94,9 @@ def fetch_etfs(date):
 def fetch_stocks(date):
     try:
         data = she.stock_zh_a_spot_em()
+        # data_file = f"zh_a_spot_20250831.csv"
+        # data = pd.read_csv(data_file, dtype={'code': 'str'})
+        # data = data.drop_duplicates(subset=['date', 'code'], keep='first')
         if data is None or len(data.index) == 0:
             return None
         if date is None:

@@ -55,6 +55,7 @@ def stock_selection() -> pd.DataFrame:
         _data = data_json["result"]["data"]
         data.extend(_data)
         page_count =page_count - 1
+        # time.sleep(10)
 
     temp_df = pd.DataFrame(data)
 
