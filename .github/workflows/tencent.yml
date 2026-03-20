@@ -1,4 +1,4 @@
-name: Volcengine Cloud Deploy
+name: Tencent CVM Deploy
 on:
   push:
    branches: [ "master" ]
