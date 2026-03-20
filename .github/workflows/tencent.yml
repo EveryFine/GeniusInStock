@@ -14,7 +14,7 @@ env:
   TARGET_SSH_PASSWORD: ${{ secrets.TENCENT_CVM_SSH_PASSWORD }}
   TARGET_SSH_PORT: ${{ secrets.TENCENT_CVM_SSH_PORT }}
   STOCK_DB_CONTAINER_NAME: GeniusStockDbService
-  STOCK_DB_NETWORK: mariadb_instock_network
+  STOCK_DB_NETWORK: compose_instock_network
   STOCK_DB_PASSWORD: ${{ secrets.STOCK_DB_PASSWORD }}
   TARGET_SERVICE_PORT: 9989
 
