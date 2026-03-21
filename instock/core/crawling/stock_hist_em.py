@@ -606,19 +606,19 @@ if __name__ == "__main__":
     #     symbol="000001", period='1'
     # )
     # print(stock_zh_a_hist_min_em_df)
-    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(symbol="000001", period="1")
-    print(stock_zh_a_hist_min_em_df)
-
-    stock_zh_a_hist_pre_min_em_df = stock_zh_a_hist_pre_min_em(symbol="000001")
-    print(stock_zh_a_hist_pre_min_em_df)
-
-    stock_zh_a_spot_em_df = stock_zh_a_spot_em()
-    print(stock_zh_a_spot_em_df)
-
-    stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(
-        symbol="000001", period='1'
-    )
-    print(stock_zh_a_hist_min_em_df)
+    # stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(symbol="000001", period="1")
+    # print(stock_zh_a_hist_min_em_df)
+    #
+    # stock_zh_a_hist_pre_min_em_df = stock_zh_a_hist_pre_min_em(symbol="000001")
+    # print(stock_zh_a_hist_pre_min_em_df)
+    #
+    # stock_zh_a_spot_em_df = stock_zh_a_spot_em()
+    # print(stock_zh_a_spot_em_df)
+    #
+    # stock_zh_a_hist_min_em_df = stock_zh_a_hist_min_em(
+    #     symbol="000001", period='1'
+    # )
+    # print(stock_zh_a_hist_min_em_df)
 
     stock_zh_a_hist_df = stock_zh_a_hist(
         symbol="000001",
