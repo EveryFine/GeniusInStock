@@ -1,0 +1,23 @@
+LOAD DATABASE
+  FROM mysql://{{MARIADB_USER}}:{{MARIADB_PASS}}@{{MARIADB_HOST}}:{{MARIADB_PORT}}/{{MARIADB_DB}}
+  INTO postgresql://{{PG_USER}}:{{PG_PASS}}@{{PG_HOST}}:{{PG_PORT}}/{{PG_DB}}
+
+WITH
+  include drop,
+  create tables,
+  create indexes,
+  reset sequences,
+  workers = 4
+
+CAST
+  type datetime to timestamptz using zero-dates-to-null,
+  type date drop not null drop default using zero-dates-to-null
+
+INCLUDING ONLY TABLE NAMES MATCHING '{{MIGRATE_TABLE}}'
+
+-- 导入到指定PG schema
+ALTER TABLE NAMES MATCHING '{{MIGRATE_TABLE}}' SET SCHEMA '{{PG_SCHEMA}}'
+
+-- 自动创建schema（不存在则新建）
+BEFORE LOAD DO
+$$ CREATE SCHEMA IF NOT EXISTS {{PG_SCHEMA}}; $$;
