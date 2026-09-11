@@ -1,6 +1,6 @@
 # 基础镜像
 # https://hub.docker.com/_/python/tags?page=1&name=3.11.9-slim-bullseye
-FROM docker.io/python:3.11.9-slim-bullseye
+FROM docker.io/python:3.11-slim-bookworm
 
 LABEL Author=zs
 #增加语言utf-8
@@ -19,10 +19,7 @@ EXPOSE 9988
 # apt-get --purge remove 软件包名称 , 删除已安装包（不保留配置文件)
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
-    echo "deb http://archive.debian.org/debian bullseye main contrib non-free" > /etc/apt/sources.list && \
-    echo "deb http://archive.debian.org/debian bullseye-updates main contrib non-free" >> /etc/apt/sources.list && \
-    echo "deb http://archive.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list && \
-    apt-get update -o Acquire::Check-Valid-Until=false && \
+    apt-get update && \
     apt-get install -y cron gcc make python3-dev default-libmysqlclient-dev build-essential pkg-config curl && \
     pip install supervisor && \
     pip install mysqlclient && \
