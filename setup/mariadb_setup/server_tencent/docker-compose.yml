@@ -11,6 +11,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
       - /mnt/cfs/genius/InStock/mariadb/data:/var/lib/mysql
+      - ./master.cnf:/etc/mysql/my.cnf:cached
     networks:
       - instock_network
 
