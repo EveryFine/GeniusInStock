@@ -1,7 +1,7 @@
 name: Tencent CVM Deploy
 on:
   push:
-   branches: [ "master" ]
+   branches: [ "dev" ]
   workflow_dispatch:
 env:
 #  REGISTRY: ghcr.io
