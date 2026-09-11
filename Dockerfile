@@ -19,6 +19,9 @@ EXPOSE 9988
 # apt-get --purge remove 软件包名称 , 删除已安装包（不保留配置文件)
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
+    echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye main contrib non-free" > /etc/apt/sources.list && \
+    echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bullseye-updates main contrib non-free" >> /etc/apt/sources.list && \
+    echo "deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y cron gcc make python3-dev default-libmysqlclient-dev build-essential pkg-config curl && \
     pip install supervisor && \
